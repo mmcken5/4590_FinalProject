@@ -33,18 +33,21 @@ rm(list = ls())
 
 # Establish DB connection
 my_db <- src_mysql(
-  dbname = "dowStockInfo",
-  host = "localhost",
+  dbname = "dowstockinfo",
+  host = "final-project-db-4590.cl74yjtmjrhj.ca-central-1.rds.amazonaws.com",
   user = "root",
-  password = "bMsMmM18"
+  password = "nico210wm!#"
 )
 
-# Query DB
+# Query DB for 'stocks' table
 my_tbl <- tbl(my_db, "stocks")
 #my_tbl <- select(my_tbl, id)
 # The collect function actually pulls in the data to R into a data frame
 my_tbl <- collect(my_tbl)
-
+# Take the first row only
+my_tbl <- my_tbl [1,]
+# View table
+my_tbl
 
 Input_List<- list(
   current_revenue <- my_tbl$current_revenue,
