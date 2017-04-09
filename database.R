@@ -1,17 +1,17 @@
+# IF THERE IS AN ERROR, PLEASE RUN R AS AN ADMINISTRATOR, THANK YOU :)
 # Create a database using dplyr with the inputs of your dcf for all the stocks in the DOW
 
-# TODO: Create DB when script is run?
 
 # Install the appropraite packages, if you have not already done so (only need to do once, not each time running program)
 # Uncomment the packages you need to install
 # If you get an error, run RStudio in Admin Mode (right click on the icon and run as administrator)
-install.packages("dplyr")
-install.packages("RMySQL")
-install.packages("data.table")
-devtools::install_github("rstudio/pool")
-devtools::install_github("rstudio/shiny")
-install.packages("tidyquant")
-install.packages("RSQLite")
+# install.packages("dplyr")
+# install.packages("RMySQL")
+# install.packages("data.table")
+# devtools::install_github("rstudio/pool")
+# devtools::install_github("rstudio/shiny")
+# install.packages("tidyquant")
+# install.packages("RSQLite")
 
 # Load packages
 library(dplyr)
@@ -19,18 +19,18 @@ library(RMySQL)
 library(tidyquant)
 library(RSQLite)
 
-tq_index("DOWJONES")
-tq_get_options()
-aapl_key_ratios <- tq_get("AAPL", get = "key.ratios")
-aapl_key_ratios[3,2][1]
-
-
-aapl_financials <- tq_get("AAPL", get = "financials")
-aapl_financials
-aapl_financials %>%
-  filter(type == "IS") %>%
-  select(annual) %>%
-  unnest()
+# tq_index("DOWJONES")
+# tq_get_options()
+# aapl_key_ratios <- tq_get("AAPL", get = "key.ratios")
+# aapl_key_ratios[3,2][1]
+# 
+# 
+# aapl_financials <- tq_get("AAPL", get = "financials")
+# aapl_financials
+# aapl_financials %>%
+#   filter(type == "IS") %>%
+#   select(annual) %>%
+#   unnest()
 
 
 # # Sample operations on the data 
