@@ -19,34 +19,6 @@ library(RMySQL)
 library(tidyquant)
 library(RSQLite)
 
-# tq_index("DOWJONES")
-# tq_get_options()
-# aapl_key_ratios <- tq_get("AAPL", get = "key.ratios")
-# aapl_key_ratios[3,2][1]
-# 
-# 
-# aapl_financials <- tq_get("AAPL", get = "financials")
-# aapl_financials
-# aapl_financials %>%
-#   filter(type == "IS") %>%
-#   select(annual) %>%
-#   unnest()
-
-
-# # Sample operations on the data 
-# # See first rows of data
-# head(airquality)
-# # Filter (sub-set) the data
-# filter(airquality, Temp > 70)
-# # Mutate adds new variables to the data
-# mutate(airquality, TempInC = (Temp - 32) * 5 / 9)
-# # Summarize aggregates multiple values into a single value
-# summarise(airquality, mean(Temp, na.rm = TRUE))
-# # The group_by function is used to group data by one or more variables.
-# summarise(group_by(airquality, Month), mean(Temp, na.rm = TRUE))
-# count(airquality, Month)
-
-
 # Clear environment
 rm(list = ls())
 
@@ -127,27 +99,11 @@ data <- copy_to(my_db, stocks, temporary = FALSE, indexes = list())
 
 
 
-
-
-
-
 # TODO: Download data via tidyquant 
 # TODO: Format that data
 # TODO: Put that data into the DB
 
 
-
-
-
-
-
-# Establish DB connection
-# my_db <- src_mysql(
-#   dbname = "dowstockinfo",
-#   host = "final-project-db-4590.cl74yjtmjrhj.ca-central-1.rds.amazonaws.com",
-#   user = "root",
-#   password = "nico210wm!#"
-# )
 
 # Query DB for 'stocks' table
 my_tbl <- tbl(my_db, "stocks")
@@ -159,6 +115,7 @@ my_tbl <- my_tbl [1,]
 # View table
 my_tbl
 
+# Create list of inputs
 Input_List<- list(
   current_revenue <- my_tbl$current_revenue,
   # Combine the growth and stable period values
@@ -466,5 +423,50 @@ dcf_function <- function(Input_List){
   return(value_of_equity_per_share)
 }
 
+# Run dcf function with the input list
 dcf_function(Input_List)
 
+
+
+# =========================================================================== #
+# TEST CODE                                                                   #
+# =========================================================================== #
+# tq_index("DOWJONES")
+# tq_get_options()
+# aapl_key_ratios <- tq_get("AAPL", get = "key.ratios")
+# aapl_key_ratios[3,2][1]
+# 
+# 
+# aapl_financials <- tq_get("AAPL", get = "financials")
+# aapl_financials
+# aapl_financials %>%
+#   filter(type == "IS") %>%
+#   select(annual) %>%
+#   unnest()
+
+
+# # Sample operations on the data 
+# # See first rows of data
+# head(airquality)
+# # Filter (sub-set) the data
+# filter(airquality, Temp > 70)
+# # Mutate adds new variables to the data
+# mutate(airquality, TempInC = (Temp - 32) * 5 / 9)
+# # Summarize aggregates multiple values into a single value
+# summarise(airquality, mean(Temp, na.rm = TRUE))
+# # The group_by function is used to group data by one or more variables.
+# summarise(group_by(airquality, Month), mean(Temp, na.rm = TRUE))
+# count(airquality, Month)
+
+
+
+# Establish DB connection
+# my_db <- src_mysql(
+#   dbname = "dowstockinfo",
+#   host = "final-project-db-4590.cl74yjtmjrhj.ca-central-1.rds.amazonaws.com",
+#   user = "root",
+#   password = "nico210wm!#"
+# )
+# =========================================================================== #
+# TEST CODE END                                                               #
+# =========================================================================== #
