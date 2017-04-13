@@ -2,13 +2,14 @@
 # Input_List from our long assignment
 
 #Some packages required to run this script
-  # library(tidyquant)
-  # library(dplyr)
-  # library(rlist)
-  # library(tidyverse)
+library(tidyquant)
+library(dplyr)
+library(rlist)
+#install.packages("rlist")
+library(tidyverse)
 
-# get_dcf_data will take the stock ticker as an argument and automaticall download the financial statments
-# and take the information needed to fill the output_list.
+# get_dcf_data will take the stock ticker as an argument and automatically download the financial statments
+#   and take the information needed to fill the output_list
 # data is downloaded from yahoo finance via tidyquant package
 get_dcf_data <- function(ticker){
   
@@ -69,6 +70,7 @@ get_dcf_data <- function(ticker){
 
 
   output_list <- list(
+    ticker_id <- ticker,
     current_revenue <- final_is$`Total Revenue`,
     
     ### Assumption taken from long assignment
@@ -134,6 +136,8 @@ get_dcf_data <- function(ticker){
   )
   return(output_list)
 }
+
+
 
 # Get a list of dow jones 30 tickers and transform them from factor to character
 dowtickers <- as.character(unlist(read.csv(file = "dow30tickers.csv",header = FALSE,sep = ",")))

@@ -291,7 +291,7 @@ dcf_function <- function(Input_List){
     cost_of_equity_stable_period <- risk_free_rate+beta_stock*risk_premium
   }
   else{
-    cost_of_debt_stable_period <- risk_free_rate+beta_stable_period*risk_premium
+    cost_of_equity_stable_period <- risk_free_rate+beta_stable_period*risk_premium
   }
   
   if(debt_capital_ratio_stable_period ==0){
