@@ -70,69 +70,82 @@ get_dcf_data <- function(ticker){
 
 
   output_list <- list(
-    ticker_id <- ticker,
-    current_revenue <- final_is$`Total Revenue`,
+    ticker_id = ticker,
+    current_revenue = final_is$`Total Revenue`,
     
     ### Assumption taken from long assignment
-    annual_revenue_growth<- c(rep((1+0.06),7),rep((1+0.03),13)),
+    annual_revenue_growth_growth = (1+0.06),
+    growth_period = 7,
+    annual_revenue_growth_stable = (1+0.03),
+    stable_period = 13,
+    ###
+    
+    annual_cogs_rate = (final_is$`Cost of Revenue, Total`/final_is$`Total Revenue`),
+    excess_periods = 20,
+    current_depreciation = (final_cfs$`Depreciation/Depletion` + final_cfs$Amortization),
+    
+    
+    ### Assumption taken from long assignment
+    annual_depreciation_growth_now = (1-0.0683317211644177),
+    adg_now_period = 1,
+    annual_depreciation_growth_growth = 1.06,
+    adg_growth_period = 5,
+    annual_depreciation_growth_stable = 1.03,
+    adg_stable_period = 14,
     ###
     
     
-    annual_cogs_rate <- c(rep((final_is$`Cost of Revenue, Total`/final_is$`Total Revenue`),20)),
-    excess_periods <- 20,
-    current_depreciation <- (final_cfs$`Depreciation/Depletion` + final_cfs$Amortization),
-    
-    
-    ### Assumption taken from long assignment
-    annual_depreciation_growth <- c((1-0.0683317211644177),(rep((1+0.06),5)),(rep((1+0.03),14))),
-    ###
-    
-    
-    tax_rate <- (1-final_is$`Income After Tax`/final_is$`Income Before Tax`),
+    tax_rate = (1-final_is$`Income After Tax`/final_is$`Income Before Tax`),
     
     # No information, assume 0
-    current_nol <- 0,
+    current_nol = 0,
     
     
-    current_capex <- -final_cfs$`Capital Expenditures`,
+    current_capex = -final_cfs$`Capital Expenditures`,
     
     ### Assumption taken from long assignment
-    annual_capex_growth <- c((1+0.023939668853227),(rep((1+0.06),4)),(rep((1+0.03),15))),
-    working_cap_rate <- c(rep(0.05,20)),
-    cap_periods <- 5,
-    beta_stock <- 1,
-    cost_of_equity <- 0.07,
-    cost_of_debt <- 0.025,
+    annual_capex_growth_now = (1+0.023939668853227),
+    acg_now_period = 1,
+    annual_capex_growth_growth = 1.06,
+    acg_growth_period = 4,
+    annual_capex_growth_stable = 1.03,
+    acg_stable_period = 15,
+    
+    working_cap_rate = c(rep(0.05,20)),
+    cap_periods = 5,
+    beta_stock = 1,
+    cost_of_equity = 0.07,
+    cost_of_debt = 0.025,
       # cost_of_equity allows user to manually set their desired cost of equity
       # To make the function calculate cost of equity, set this variable to 0
     
-    risk_free_rate <- 0.02,
-    risk_premium <- 0.05,
+    risk_free_rate = 0.02,
+    risk_premium = 0.05,
     
-    publicly_traded_flag <- TRUE,
+    publicly_traded_flag = TRUE,
     ###
     
     
-    last_traded_price <- sp_close$close,
-    shares_outstanding <- final_bs$`Total Common Shares Outstanding`,
+    last_traded_price = sp_close$close,
+    shares_outstanding = final_bs$`Total Common Shares Outstanding`,
     
     #### Assumption taken from long assignment
-    market_val_debt <- 0.1,
+    market_val_debt = 0.1,
     ####
     
-    book_val_debt <- final_bs$`Total Debt`,
-    book_val_equity <- final_bs$`Total Equity`,
-    debt_capital_ratio <- 0,
+    book_val_debt = final_bs$`Total Debt`,
+    book_val_equity = final_bs$`Total Equity`,
+    debt_capital_ratio = 0,
     
-    beta_stable_period <- 0,
-    debt_capital_ratio_stable_period <- 0.15,
-    cost_of_debt_stable_period <- 0.08,
+    beta_stable_period = 0,
+    debt_capital_ratio_stable_period = 0.15,
+    cost_of_debt_stable_period = 0.08,
     
-    growth_rate_stable_period <- 0.03,
-    operating_expense_stable_period <- 0.8165,
-    capex_stable_period <- 1.1,
-    working_cap_rate_stable_period <- 0.01,
-    cost_of_debt_flag <- TRUE
+    growth_rate_stable_period = 0.03,
+    operating_expense_stable_period = 0.8165,
+    capex_stable_period = 1.1,
+    working_cap_rate_stable_period = 0.01,
+    cost_of_debt_flag = TRUE
   )
   return(output_list)
 }
