@@ -45,6 +45,7 @@ my_db <- src_sqlite("stock_db.sqlite3", create = T)
 id = c(1, 2)
 ticker <- c("TEST1", "TEST2") 
 name <- c("Test Stock 1", "Test Stock 2")
+stock_price <- c(400,400)
 current_revenue = c(108249, 108249)
 annual_revenue_growth_growth <- c((1+0.06), (1+0.06))
 growth_period <- c(7, 7)
@@ -94,7 +95,7 @@ cost_of_debt_flag <- c(TRUE,TRUE)
 
 
 # Create a data frame using the variables as columns
-stocksData = data.frame(id, ticker, name, current_revenue, annual_revenue_growth_growth, growth_period,
+stocksData = data.frame(id, ticker, name, stock_price, current_revenue, annual_revenue_growth_growth, growth_period,
                 annual_revenue_growth_stable,stable_period,annual_cogs_rate,excess_periods,
                 current_depreciation,annual_depreciation_growth_now,adg_now_period,
                 annual_depreciation_growth_growth, adg_growth_period,annual_depreciation_growth_stable,
@@ -282,6 +283,8 @@ server <- function(input,output){
   for (j in 1:tblNMB){
   current_revenue <- my_tbl$current_revenue[j]
   StockName <- my_tbl$name
+  current_stock_price <- my_tbl$stock_price
+  
   # Combine the growth and stable period values
   annual_revenue_growth <- c(rep(my_tbl$annual_revenue_growth_growth[j], my_tbl$growth_period[j]), 
                              rep(my_tbl$annual_revenue_growth_stable[j], my_tbl$stable_period[j]))  

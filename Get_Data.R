@@ -71,6 +71,7 @@ get_dcf_data <- function(ticker){
 
   output_list <- list(
     ticker_id = ticker,
+    stock_price = sp_close,
     current_revenue = final_is$`Total Revenue`,
     
     ### Assumption taken from long assignment

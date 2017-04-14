@@ -2,6 +2,7 @@
 # List my use equal signs in order for my_list$xyz to work
 my_list <- list(
 ticker = "TEST1",
+stock_price = 400,
 current_revenue = 108249,
 annual_revenue_growth_growth = (1+0.06),
 growth_period = 7,
@@ -96,6 +97,7 @@ createDF <-function(input_data){
   
   # Put values into DB (each variable is a column)
   ticker <- input_data$ticker
+  stock_price <- input_data$stock_price
   current_revenue = input_data$current_revenue
     
   annual_revenue_growth_growth <- input_data$annual_revenue_growth_growth
@@ -152,7 +154,7 @@ createDF <-function(input_data){
   cost_of_debt_flag <- input_data$cost_of_debt_flag
     
   # Create a data frame using the variables as columns
-  stocks <- data.frame(ticker, current_revenue, annual_revenue_growth_growth, growth_period,
+  stocks <- data.frame(ticker, stock_price, current_revenue, annual_revenue_growth_growth, growth_period,
                       annual_revenue_growth_stable,stable_period,annual_cogs_rate,excess_periods,
                       current_depreciation,annual_depreciation_growth_now,adg_now_period,
                       annual_depreciation_growth_growth, adg_growth_period,annual_depreciation_growth_stable,
@@ -165,7 +167,7 @@ createDF <-function(input_data){
                       growth_rate_stable_period, operating_expense_stable_period, capex_stable_period, 
                       working_cap_rate_stable_period, cost_of_debt_flag)  
   
-  names(stocks) <- c("ticker", "current_revenue", "annual_revenue_growth_growth", "growth_period",
+  names(stocks) <- c("ticker", "stock_price", "current_revenue", "annual_revenue_growth_growth", "growth_period",
                      "annual_revenue_growth_stable","stable_period","annual_cogs_rate","excess_periods",
                      "current_depreciation","annual_depreciation_growth_now","adg_now_period",
                      "annual_depreciation_growth_growth", "adg_growth_period","annual_depreciation_growth_stable",
@@ -186,6 +188,7 @@ my_df <- createDF(my_list)
 addToDF <- function(currDF, input_data){
   
   ticker <- input_data$ticker
+  stock_price <- input_data$stock_price
   current_revenue = input_data$current_revenue
   
   annual_revenue_growth_growth <- input_data$annual_revenue_growth_growth
@@ -241,7 +244,7 @@ addToDF <- function(currDF, input_data){
   working_cap_rate_stable_period <- input_data$working_cap_rate_stable_period
   cost_of_debt_flag <- input_data$cost_of_debt_flag
   
-  tempDF <- data.frame(ticker, current_revenue, annual_revenue_growth_growth, growth_period,
+  tempDF <- data.frame(ticker, stock_price, current_revenue, annual_revenue_growth_growth, growth_period,
                        annual_revenue_growth_stable,stable_period,annual_cogs_rate,excess_periods,
                        current_depreciation,annual_depreciation_growth_now,adg_now_period,
                        annual_depreciation_growth_growth, adg_growth_period,annual_depreciation_growth_stable,
@@ -255,7 +258,7 @@ addToDF <- function(currDF, input_data){
                        working_cap_rate_stable_period, cost_of_debt_flag)   
   
   # set the column names to ensure binding works correctly
-  names(tempDF) <- c("ticker", "current_revenue", "annual_revenue_growth_growth", "growth_period",
+  names(tempDF) <- c("ticker", "stock_price", "current_revenue", "annual_revenue_growth_growth", "growth_period",
                         "annual_revenue_growth_stable","stable_period","annual_cogs_rate","excess_periods",
                         "current_depreciation","annual_depreciation_growth_now","adg_now_period",
                         "annual_depreciation_growth_growth", "adg_growth_period","annual_depreciation_growth_stable",
@@ -286,7 +289,7 @@ loadDFIntoDB <- function(df){
 }
 
 # TODO:
-insertRowIntoDB function(row){
+insertRowIntoDB <- function(row){
   
 }
 
