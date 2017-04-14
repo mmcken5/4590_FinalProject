@@ -1,7 +1,11 @@
-source("database.R")
+# Set your working directory
+#getwd()
+setwd("C:/Users/mikem/Projects/4590/4590_FinalProject/")
 
 # Clear environment
 rm(list = ls())
+
+source("database.R")
 
 # Create db (if does not already exist)
 # Connect to db
@@ -24,3 +28,6 @@ my_tbl <- getTable(my_db, "stocksData")
 
 # Get the tickers (which is the first column)
 tickers <- getFirstColumnFromTable(my_tbl)
+
+my_tbl
+tickers

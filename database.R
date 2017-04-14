@@ -80,10 +80,6 @@ createSampleTestData <- function(){
 }
 
 
-# Clear environment
-rm(list = ls())
-
-
 # Set your working directory
 #getwd()
 #setwd("C:/Users/mikem/Projects/4590/4590_FinalProject/")
@@ -191,10 +187,10 @@ createDF <-function(input_data){
 
 
 # Load a data frame into a db as a table
-loadDFIntoDB <- function(db, df){
+loadDFIntoDB <- function(db, stocksData){
   
   # Load the data frame into the database 
-  data <- copy_to(db, df, temporary = FALSE)
+  data <- copy_to(db, stocksData, temporary = FALSE)
 }
 
 
