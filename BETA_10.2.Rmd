@@ -572,7 +572,7 @@ server <- function(input,output){
   
   output_value_equity <- c(output_value_equity, value_of_firm-output_value_debt)
   value_of_equity_per_share <- output_value_equity/shares_outstanding
-  margin_safety <- 1- (value_of_equity_per_share/current_stock_price)
+  margin_safety <- (1 - (value_of_equity_per_share/current_stock_price))
   }
   
   DCFfinalput <- data.frame(StockName,output_value_equity,value_of_equity_per_share, margin_safety)
