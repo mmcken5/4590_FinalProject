@@ -78,15 +78,13 @@ createSampleTestData <- function(){
   
   return(my_list)
 }
-#my_list <- createSampleTestData()
+my_list <- createSampleTestData()
 
 
 
 
 # Clear environment
-clearEnv <- function(){
-  rm(list = ls())
-}
+rm(list = ls())
 
 
 # Set your working directory
@@ -99,7 +97,10 @@ clearEnv <- function(){
 # name: "stock_db.sqlite3"
 connectToDB <- function(dbName){
   my_db <- src_sqlite(dbName, create = T)
+  return(my_db)
 }
+my_db <- connectToDB("stock_db.sqlite3")
+
 
 # Create a data frame from a list of input data
 createDF <-function(input_data){
@@ -192,99 +193,100 @@ createDF <-function(input_data){
   return(stocks)
 }
 # TEST
-#my_df <- createDF(my_list)
+my_df <- createDF(my_list)
 
-addToDF <- function(currDF, input_data){
-  
-  ticker <- input_data$ticker
-  stock_price <- input_data$stock_price
-  current_revenue = input_data$current_revenue
-  
-  annual_revenue_growth_growth <- input_data$annual_revenue_growth_growth
-  growth_period <- input_data$growth_period
-  annual_revenue_growth_stable <- input_data$annual_revenue_growth_stable
-  stable_period <- input_data$stable_period
-  
-  annual_cogs_rate <- input_data$annual_cogs_rate
-  excess_periods <- input_data$excess_periods
-  current_depreciation <- input_data$current_depreciation
-  
-  annual_depreciation_growth_now <- input_data$annual_depreciation_growth_now
-  adg_now_period <- input_data$adg_now_period
-  annual_depreciation_growth_growth <- input_data$annual_depreciation_growth_growth
-  adg_growth_period <- input_data$adg_growth_period
-  annual_depreciation_growth_stable <- input_data$annual_depreciation_growth_stable
-  adg_stable_period <- input_data$adg_stable_period
-  
-  tax_rate <- input_data$tax_rate
-  
-  current_nol <- input_data$current_nol
-  
-  current_capex <- input_data$current_capex
-  
-  annual_capex_growth_now <- input_data$annual_capex_growth_now
-  acg_now_period <- input_data$acg_now_period
-  annual_capex_growth_growth <- input_data$annual_capex_growth_growth
-  acg_growth_period <- input_data$acg_growth_period
-  annual_capex_growth_stable <- input_data$annual_capex_growth_stable
-  acg_stable_period <- input_data$acg_stable_period
-  
-  working_cap_rate <- input_data$working_cap_rate
-  wcr_period <- input_data$wcr_period
-  cap_periods <- input_data$cap_periods
-  beta_stock <- input_data$beta_stock
-  cost_of_equity <- input_data$cost_of_equity
-  cost_of_debt <- input_data$cost_of_debt
-  risk_free_rate <- input_data$risk_free_rate
-  risk_premium <- input_data$risk_premium
-  publicly_traded_flag <- input_data$publicly_traded_flag
-  last_traded_price <- input_data$last_traded_price
-  shares_outstanding <- input_data$shares_outstanding
-  market_val_debt <- input_data$market_val_debt
-  book_val_debt <- input_data$book_val_debt
-  book_val_equity <- input_data$book_val_equity
-  debt_capital_ratio <- input_data$debt_capital_ratio
-  beta_stable_period <- input_data$beta_stable_period
-  debt_capital_ratio_stable_period <- input_data$debt_capital_ratio_stable_period
-  cost_of_debt_stable_period <- input_data$cost_of_debt_stable_period
-  growth_rate_stable_period <- input_data$growth_rate_stable_period
-  operating_expense_stable_period <- input_data$operating_expense_stable_period
-  capex_stable_period <- input_data$capex_stable_period
-  working_cap_rate_stable_period <- input_data$working_cap_rate_stable_period
-  cost_of_debt_flag <- input_data$cost_of_debt_flag
-  
-  tempDF <- data.frame(ticker, stock_price, current_revenue, annual_revenue_growth_growth, growth_period,
-                       annual_revenue_growth_stable,stable_period,annual_cogs_rate,excess_periods,
-                       current_depreciation,annual_depreciation_growth_now,adg_now_period,
-                       annual_depreciation_growth_growth, adg_growth_period,annual_depreciation_growth_stable,
-                       adg_stable_period, tax_rate, current_nol, current_capex, annual_capex_growth_now,
-                       acg_now_period, annual_capex_growth_growth, acg_growth_period, annual_capex_growth_stable,
-                       acg_stable_period, working_cap_rate, wcr_period, cap_periods, beta_stock, cost_of_equity, 
-                       cost_of_debt, risk_free_rate, risk_premium, publicly_traded_flag, last_traded_price,
-                       shares_outstanding, market_val_debt, book_val_debt, book_val_equity, debt_capital_ratio, 
-                       beta_stable_period, debt_capital_ratio_stable_period, cost_of_debt_stable_period,
-                       growth_rate_stable_period, operating_expense_stable_period, capex_stable_period, 
-                       working_cap_rate_stable_period, cost_of_debt_flag)   
-  
-  # set the column names to ensure binding works correctly
-  names(tempDF) <- c("ticker", "stock_price", "current_revenue", "annual_revenue_growth_growth", "growth_period",
-                        "annual_revenue_growth_stable","stable_period","annual_cogs_rate","excess_periods",
-                        "current_depreciation","annual_depreciation_growth_now","adg_now_period",
-                        "annual_depreciation_growth_growth", "adg_growth_period","annual_depreciation_growth_stable",
-                        "adg_stable_period", "tax_rate", "current_nol", "current_capex", "annual_capex_growth_now",
-                        "acg_now_period", "annual_capex_growth_growth", "acg_growth_period", "annual_capex_growth_stable",
-                        "acg_stable_period", "working_cap_rate", "wcr_period", "cap_periods", "beta_stock", "cost_of_equity", 
-                        "cost_of_debt", "risk_free_rate", "risk_premium", "publicly_traded_flag", "last_traded_price",
-                        "shares_outstanding", "market_val_debt", "book_val_debt", "book_val_equity", "debt_capital_ratio", 
-                        "beta_stable_period", "debt_capital_ratio_stable_period", "cost_of_debt_stable_period",
-                        "growth_rate_stable_period", "operating_expense_stable_period", "capex_stable_period", 
-                        "working_cap_rate_stable_period", "cost_of_debt_flag")
-  
-  # bind the new row
-  new_df <- rbind(currDF, tempDF)
-  
-  return (new_df)
-}
+
+# addToDF <- function(currDF, input_data){
+#   
+#   ticker <- input_data$ticker
+#   stock_price <- input_data$stock_price
+#   current_revenue = input_data$current_revenue
+#   
+#   annual_revenue_growth_growth <- input_data$annual_revenue_growth_growth
+#   growth_period <- input_data$growth_period
+#   annual_revenue_growth_stable <- input_data$annual_revenue_growth_stable
+#   stable_period <- input_data$stable_period
+#   
+#   annual_cogs_rate <- input_data$annual_cogs_rate
+#   excess_periods <- input_data$excess_periods
+#   current_depreciation <- input_data$current_depreciation
+#   
+#   annual_depreciation_growth_now <- input_data$annual_depreciation_growth_now
+#   adg_now_period <- input_data$adg_now_period
+#   annual_depreciation_growth_growth <- input_data$annual_depreciation_growth_growth
+#   adg_growth_period <- input_data$adg_growth_period
+#   annual_depreciation_growth_stable <- input_data$annual_depreciation_growth_stable
+#   adg_stable_period <- input_data$adg_stable_period
+#   
+#   tax_rate <- input_data$tax_rate
+#   
+#   current_nol <- input_data$current_nol
+#   
+#   current_capex <- input_data$current_capex
+#   
+#   annual_capex_growth_now <- input_data$annual_capex_growth_now
+#   acg_now_period <- input_data$acg_now_period
+#   annual_capex_growth_growth <- input_data$annual_capex_growth_growth
+#   acg_growth_period <- input_data$acg_growth_period
+#   annual_capex_growth_stable <- input_data$annual_capex_growth_stable
+#   acg_stable_period <- input_data$acg_stable_period
+#   
+#   working_cap_rate <- input_data$working_cap_rate
+#   wcr_period <- input_data$wcr_period
+#   cap_periods <- input_data$cap_periods
+#   beta_stock <- input_data$beta_stock
+#   cost_of_equity <- input_data$cost_of_equity
+#   cost_of_debt <- input_data$cost_of_debt
+#   risk_free_rate <- input_data$risk_free_rate
+#   risk_premium <- input_data$risk_premium
+#   publicly_traded_flag <- input_data$publicly_traded_flag
+#   last_traded_price <- input_data$last_traded_price
+#   shares_outstanding <- input_data$shares_outstanding
+#   market_val_debt <- input_data$market_val_debt
+#   book_val_debt <- input_data$book_val_debt
+#   book_val_equity <- input_data$book_val_equity
+#   debt_capital_ratio <- input_data$debt_capital_ratio
+#   beta_stable_period <- input_data$beta_stable_period
+#   debt_capital_ratio_stable_period <- input_data$debt_capital_ratio_stable_period
+#   cost_of_debt_stable_period <- input_data$cost_of_debt_stable_period
+#   growth_rate_stable_period <- input_data$growth_rate_stable_period
+#   operating_expense_stable_period <- input_data$operating_expense_stable_period
+#   capex_stable_period <- input_data$capex_stable_period
+#   working_cap_rate_stable_period <- input_data$working_cap_rate_stable_period
+#   cost_of_debt_flag <- input_data$cost_of_debt_flag
+#   
+#   tempDF <- data.frame(ticker, stock_price, current_revenue, annual_revenue_growth_growth, growth_period,
+#                        annual_revenue_growth_stable,stable_period,annual_cogs_rate,excess_periods,
+#                        current_depreciation,annual_depreciation_growth_now,adg_now_period,
+#                        annual_depreciation_growth_growth, adg_growth_period,annual_depreciation_growth_stable,
+#                        adg_stable_period, tax_rate, current_nol, current_capex, annual_capex_growth_now,
+#                        acg_now_period, annual_capex_growth_growth, acg_growth_period, annual_capex_growth_stable,
+#                        acg_stable_period, working_cap_rate, wcr_period, cap_periods, beta_stock, cost_of_equity, 
+#                        cost_of_debt, risk_free_rate, risk_premium, publicly_traded_flag, last_traded_price,
+#                        shares_outstanding, market_val_debt, book_val_debt, book_val_equity, debt_capital_ratio, 
+#                        beta_stable_period, debt_capital_ratio_stable_period, cost_of_debt_stable_period,
+#                        growth_rate_stable_period, operating_expense_stable_period, capex_stable_period, 
+#                        working_cap_rate_stable_period, cost_of_debt_flag)   
+#   
+#   # set the column names to ensure binding works correctly
+#   names(tempDF) <- c("ticker", "stock_price", "current_revenue", "annual_revenue_growth_growth", "growth_period",
+#                         "annual_revenue_growth_stable","stable_period","annual_cogs_rate","excess_periods",
+#                         "current_depreciation","annual_depreciation_growth_now","adg_now_period",
+#                         "annual_depreciation_growth_growth", "adg_growth_period","annual_depreciation_growth_stable",
+#                         "adg_stable_period", "tax_rate", "current_nol", "current_capex", "annual_capex_growth_now",
+#                         "acg_now_period", "annual_capex_growth_growth", "acg_growth_period", "annual_capex_growth_stable",
+#                         "acg_stable_period", "working_cap_rate", "wcr_period", "cap_periods", "beta_stock", "cost_of_equity", 
+#                         "cost_of_debt", "risk_free_rate", "risk_premium", "publicly_traded_flag", "last_traded_price",
+#                         "shares_outstanding", "market_val_debt", "book_val_debt", "book_val_equity", "debt_capital_ratio", 
+#                         "beta_stable_period", "debt_capital_ratio_stable_period", "cost_of_debt_stable_period",
+#                         "growth_rate_stable_period", "operating_expense_stable_period", "capex_stable_period", 
+#                         "working_cap_rate_stable_period", "cost_of_debt_flag")
+#   
+#   # bind the new row
+#   new_df <- rbind(currDF, tempDF)
+#   
+#   return (new_df)
+# }
 #TEST
 #my_new_df <- addToDF(my_df, my_list)
 #my_new_df
@@ -295,10 +297,39 @@ loadDFIntoDB <- function(db, df){
   # Load the data frame into the database 
   data <- copy_to(db, df, temporary = FALSE)
 }
+loadDFIntoDB(my_db, my_df)
 
-# TODO:
-insertRowIntoDB <- function(row){
+
+insertRowIntoDB <- function(db, tableName, row_list){
   
+  sql_string <- paste("INSERT INTO ", tableName,
+                      " VALUES (", row_list, sep = "")
+  
+  # Send the query to the db
+  res <- dbSendQuery(db, sql_string)
+}
+
+updateRowInDB <- function(db, tableName, colId, input_list){
+  
+  sql_string <- paste("UPDATE ", tableName,
+                      " SET tax_rate = ", input_list$tax_rate,
+                      ", cost_of_equity = ", input_list$cost_of_equity,
+                      ", cost_of_debt = ", input_list$cost_of_debt,
+                      ", risk_free_rate = ", input_list$risk_free_rate,
+                      ", risk_premium = ", input_list$risk_premium,
+                      ", publicly_traded_flag = ", input_list$publicly_traded_flag,
+                      ", beta_stable_period = ", input_list$beta_stable_period,
+                      ", debt_capital_ratio_stable_period = ", input_list$debt_capital_ratio_stable_period,
+                      ", cost_of_debt_stable_period = ", input_list$cost_of_debt_stable_period,
+                      ", growth_rate_stable_period = ", input_list$growth_rate_stable_period,
+                      ", operating_expense_stable_period = ", input_list$operating_expense_stable_period,
+                      ", capex_stable_period = ", input_list$capex_stable_period,
+                      ", working_cap_rate_stable_period = ", input_list$working_cap_rate_stable_period,
+                      ", cost_of_debt_flag = ", input_list$cost_of_debt_flag,
+                      " WHERE ticker = '", colId, "'", sep = "")
+  
+  # Send the query to the db
+  res <- dbSendQuery(db, sql_string)
 }
 
 # DON'T NEED TO DO THIS ANYMORE
@@ -360,9 +391,6 @@ getFirstColumnFromTable <- function(table_df){
 # TEST
 #tickers <- getFirstColumnFromTable(my_tbl)
 
-# TODO: Get full table and loop through rows
-
-# Spit out tickers from database
 
 # Create list of inputs
 Input_List<- list(
