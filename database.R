@@ -314,6 +314,8 @@ my_tbl
 
 # TODO: Get full table and loop through rows
 
+# Spit out tickers from database
+
 # Create list of inputs
 Input_List<- list(
   current_revenue <- my_tbl$current_revenue,
