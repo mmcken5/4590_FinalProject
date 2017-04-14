@@ -293,20 +293,46 @@ insertRowIntoDB <- function(row){
   
 }
 
-# TODO: When adding new info to the DB: delete old DB file, create the DF 
-#     and then create a new DB and copy the data to the DB file
-deleteExistingDBFile <- function(fileName){
-  if (file.exists(fileName)){
-    # Close db session
-    # Remove file
-    file.remove(fileName)
-  } 
+# DON'T NEED TO DO THIS ANYMORE
+# # TODO: When adding new info to the DB: delete old DB file, create the DF 
+# #     and then create a new DB and copy the data to the DB file
+# deleteExistingDBFile <- function(fileName){
+#   if (file.exists(fileName)){
+#     # Close db session
+#     # Remove file
+#     file.remove(fileName)
+#   } 
+# }
+# #TEST
+# deleteExistingDBFile("stock_db.sqlite3")
+
+# Check if the db already contains the 'stocks' table
+doesDBContainTable <- function(my_db, tableName){
+  # set return value to false
+  retVal <- FALSE
+  
+  # Get a list of the table names in the db
+  tbl_names <- src_tbls(my_db)
+  
+  # Check tha that there are tables in the db
+  if (length(tbl_names) == 0){
+    return(FALSE)
+  }
+  
+  # Search for the input table name
+  for(i in 1:length(tbl_names)){
+    if(tbl_names[i] == tableName){
+      retVal <- TRUE
+    }
+  }
+  
+  return(retVal)
 }
-#TEST
-deleteExistingDBFile("stock_db.sqlite3")
+
+doesDBContainTable(my_db, "stocksData")
 
 # Query DB for 'stocks' table
-my_tbl <- tbl(my_db, "stocks")
+my_tbl <- tbl(my_db, "stocksData")
 #my_tbl <- select(my_tbl, id)
 # The collect function actually pulls in the data to R into a data frame
 my_tbl <- collect(my_tbl)
@@ -314,6 +340,8 @@ my_tbl <- collect(my_tbl)
 my_tbl <- my_tbl [1,]
 # View table
 my_tbl
+
+
 
 # TODO: Get full table and loop through rows
 
