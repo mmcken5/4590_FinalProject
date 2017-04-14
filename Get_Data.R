@@ -6,6 +6,7 @@ library(tidyquant)
 library(dplyr)
 library(rlist)
 #install.packages("rlist")
+#install.packages("tidyquant")
 library(tidyverse)
 
 # get_dcf_data will take the stock ticker as an argument and automatically download the financial statments
@@ -70,8 +71,8 @@ get_dcf_data <- function(ticker){
 
 
   output_list <- list(
-    ticker_id = ticker,
-    stock_price = sp_close,
+    ticker = ticker,
+    stock_price = sp_close$close,
     current_revenue = final_is$`Total Revenue`,
     
     ### Assumption taken from long assignment
@@ -81,7 +82,7 @@ get_dcf_data <- function(ticker){
     stable_period = 13,
     ###
     
-    annual_cogs_rate = (final_is$`Cost of Revenue, Total`/final_is$`Total Revenue`),
+    annual_cogs_rate = 10,#(final_is$`Cost of Revenue, Total`/final_is$`Total Revenue`),
     excess_periods = 20,
     current_depreciation = (final_cfs$`Depreciation/Depletion` + final_cfs$Amortization),
     
@@ -112,13 +113,14 @@ get_dcf_data <- function(ticker){
     annual_capex_growth_stable = 1.03,
     acg_stable_period = 15,
     
-    working_cap_rate = c(rep(0.05,20)),
+    working_cap_rate = 0.05,
+    wcr_period = 20,
     cap_periods = 5,
     beta_stock = 1,
     cost_of_equity = 0.07,
     cost_of_debt = 0.025,
       # cost_of_equity allows user to manually set their desired cost of equity
-      # To make the function calculate cost of equity, set this variable to 0
+      # To make the function calculate cost of equity set this variable to 0
     
     risk_free_rate = 0.02,
     risk_premium = 0.05,
@@ -151,19 +153,29 @@ get_dcf_data <- function(ticker){
   return(output_list)
 }
 
-
-
-# Get a list of dow jones 30 tickers and transform them from factor to character
-dowtickers <- as.character(unlist(read.csv(file = "dow30tickers.csv",header = FALSE,sep = ",")))
-
-# dcf_data_list will have the same length of 'dowtickers'
-# each element in dcf_data_list is essentially a 'input_list' from the long assignment
-# therefore, each of these lists is a list of 32 elements...
-dcf_data_list <- list(get_dcf_data(dowtickers[[1]]))
-for (i in 2:length(dowtickers)){
+#"dow30tickers.csv"
+getDowData <- function(csvFile){
+  # Get a list of dow jones 30 tickers and transform them from factor to character
+  dowtickers <- as.character(unlist(read.csv(file = csvFile, header = FALSE,sep = ",")))
+  
+  # dcf_data_list will have the same length of 'dowtickers'
+  # each element in dcf_data_list is essentially a 'input_list' from the long assignment
+  # therefore, each of these lists is a list of 32 elements...
+  dcf_data_list <- list(get_dcf_data(dowtickers[[1]]))
+  for (i in 2:5){#length(dowtickers)){
     dcf_data_list[i] <- list(get_dcf_data(dowtickers[[i]]))
+  }
+  
+  # the name of each of the 30 lists will be their corresponding stock ticker
+  #names(dcf_data_list) <- dowtickers
+  #str(dcf_data_list)
+  
+  return(dcf_data_list)
 }
 
-# the name of each of the 30 lists will be their corresponding stock ticker
-names(dcf_data_list) <- dowtickers
-str(dcf_data_list)
+
+#setwd("C:/Users/mikem/Projects/4590/4590_FinalProject/")
+dowData <- getDowData("dow30tickers.csv")
+df_dow_Data <- as.data.frame(dowData)
+
+setwd("C:/Users/mikem/Projects/4590/4590_FinalProject/")
