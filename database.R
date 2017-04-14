@@ -1,57 +1,3 @@
-# TEST DATA #
-# List my use equal signs in order for my_list$xyz to work
-my_list <- list(
-ticker = "TEST1",
-stock_price = 400,
-current_revenue = 108249,
-annual_revenue_growth_growth = (1+0.06),
-growth_period = 7,
-annual_revenue_growth_stable = (1+0.03),
-stable_period = 13,
-annual_cogs_rate = 0.8165,
-excess_periods = 20,
-current_depreciation = 1814,
-annual_depreciation_growth_now = (1-0.0683317211644177),
-adg_now_period = 1,
-annual_depreciation_growth_growth = 1.06,
-adg_growth_period = 5,
-annual_depreciation_growth_stable = 1.03,
-adg_stable_period = 14,
-tax_rate = 0.2422,
-current_nol = 200000,
-current_capex = 7696,
-annual_capex_growth_now = (1+0.023939668853227),
-acg_now_period = 1,
-annual_capex_growth_growth = 1.06,
-acg_growth_period = 4,
-annual_capex_growth_stable = 1.03,
-acg_stable_period = 15,
-working_cap_rate = 0.05,
-wcr_period = 20,
-cap_periods = 5,
-beta_stock = 1,
-cost_of_equity = 0.07,
-cost_of_debt = 0.025,
-risk_free_rate = 0.02,
-risk_premium = 0.05,
-publicly_traded_flag = TRUE,
-last_traded_price = 500,
-shares_outstanding = 929.3,
-market_val_debt = 0.1,
-book_val_debt = 0.1,
-book_val_equity = 76615,
-debt_capital_ratio = 0,
-beta_stable_period = 0,
-debt_capital_ratio_stable_period = 0.15,
-cost_of_debt_stable_period = 0.08,
-growth_rate_stable_period = 0.03,
-operating_expense_stable_period = 0.8165,
-capex_stable_period = 1.1,
-working_cap_rate_stable_period = 0.01,
-cost_of_debt_flag = TRUE
-)
-
-
 # IF THERE IS AN ERROR, PLEASE RUN R AS AN ADMINISTRATOR, THANK YOU :)
 # Create a database using dplyr with the inputs of your dcf for all the stocks in the DOW
 
@@ -77,22 +23,85 @@ library(RSQLite)
 library(shiny)
 library(DBI)
 
+# Create a list of sample test data
+createSampleTestData <- function(){
+  my_list <- list(
+  ticker = "TEST1",
+  stock_price = 400,
+  current_revenue = 108249,
+  annual_revenue_growth_growth = (1+0.06),
+  growth_period = 7,
+  annual_revenue_growth_stable = (1+0.03),
+  stable_period = 13,
+  annual_cogs_rate = 0.8165,
+  excess_periods = 20,
+  current_depreciation = 1814,
+  annual_depreciation_growth_now = (1-0.0683317211644177),
+  adg_now_period = 1,
+  annual_depreciation_growth_growth = 1.06,
+  adg_growth_period = 5,
+  annual_depreciation_growth_stable = 1.03,
+  adg_stable_period = 14,
+  tax_rate = 0.2422,
+  current_nol = 200000,
+  current_capex = 7696,
+  annual_capex_growth_now = (1+0.023939668853227),
+  acg_now_period = 1,
+  annual_capex_growth_growth = 1.06,
+  acg_growth_period = 4,
+  annual_capex_growth_stable = 1.03,
+  acg_stable_period = 15,
+  working_cap_rate = 0.05,
+  wcr_period = 20,
+  cap_periods = 5,
+  beta_stock = 1,
+  cost_of_equity = 0.07,
+  cost_of_debt = 0.025,
+  risk_free_rate = 0.02,
+  risk_premium = 0.05,
+  publicly_traded_flag = TRUE,
+  last_traded_price = 500,
+  shares_outstanding = 929.3,
+  market_val_debt = 0.1,
+  book_val_debt = 0.1,
+  book_val_equity = 76615,
+  debt_capital_ratio = 0,
+  beta_stable_period = 0,
+  debt_capital_ratio_stable_period = 0.15,
+  cost_of_debt_stable_period = 0.08,
+  growth_rate_stable_period = 0.03,
+  operating_expense_stable_period = 0.8165,
+  capex_stable_period = 1.1,
+  working_cap_rate_stable_period = 0.01,
+  cost_of_debt_flag = TRUE
+  )
+  
+  return(my_list)
+}
+#my_list <- createSampleTestData()
+
+
+
+
 # Clear environment
-rm(list = ls())
+clearEnv <- function(){
+  rm(list = ls())
+}
+
 
 # Set your working directory
-getwd()
-setwd("C:/Users/mikem/Projects/4590/4590_FinalProject/")
-dir()
+#getwd()
+#setwd("C:/Users/mikem/Projects/4590/4590_FinalProject/")
+#dir()
 
-
-
-# TODO: Turn these into functions and then call them from the markdown file
 
 # Create a SQL Lite DB in the current working directory (if does not already exist) and connect to it
-my_db <- src_sqlite("stock_db.sqlite3", create = T)
+# name: "stock_db.sqlite3"
+connectToDB <- function(dbName){
+  my_db <- src_sqlite(dbName, create = T)
+}
 
-
+# Create a data frame from a list of input data
 createDF <-function(input_data){
   
   # Put values into DB (each variable is a column)
@@ -183,7 +192,7 @@ createDF <-function(input_data){
   return(stocks)
 }
 # TEST
-my_df <- createDF(my_list)
+#my_df <- createDF(my_list)
 
 addToDF <- function(currDF, input_data){
   
@@ -277,15 +286,14 @@ addToDF <- function(currDF, input_data){
   return (new_df)
 }
 #TEST
-my_new_df <- addToDF(my_df, my_list)
-#TEST
-my_new_df
+#my_new_df <- addToDF(my_df, my_list)
+#my_new_df
 
-
-loadDFIntoDB <- function(df){
+# Load a data frame into a db as a table
+loadDFIntoDB <- function(db, df){
   
   # Load the data frame into the database 
-  data <- copy_to(my_db, df, temporary = FALSE, indexes = list(ticker))
+  data <- copy_to(db, df, temporary = FALSE)
 }
 
 # TODO:
@@ -328,20 +336,29 @@ doesDBContainTable <- function(my_db, tableName){
   
   return(retVal)
 }
+# TEST
+#doesDBContainTable(my_db, "stocksData")
 
-doesDBContainTable(my_db, "stocksData")
+# Query DB for table
+getTable <- function(db, tableName){
+  # Specify the table and the db to get it from
+  my_tbl <- tbl(db, tableName)
+  
+  # The collect function actually pulls in the data to R into a data frame
+  my_tbl <- collect(my_tbl)
+  
+  # Return the table
+  return(my_tbl)
+}
+# TEST
+#my_tbl <- getTable(my_db, "stocksData")
 
-# Query DB for 'stocks' table
-my_tbl <- tbl(my_db, "stocksData")
-#my_tbl <- select(my_tbl, id)
-# The collect function actually pulls in the data to R into a data frame
-my_tbl <- collect(my_tbl)
-# Take the first row only
-my_tbl <- my_tbl [1,]
-# View table
-my_tbl
-
-
+# Get the first column of a table (used to get stock tickers)
+getFirstColumnFromTable <- function(table_df){
+  return(table_df[,1])
+}
+# TEST
+#tickers <- getFirstColumnFromTable(my_tbl)
 
 # TODO: Get full table and loop through rows
 
@@ -401,6 +418,12 @@ Input_List<- list(
   working_cap_rate_stable_period <- my_tbl$working_cap_rate_stable_period,
   cost_of_debt_flag <- my_tbl$cost_of_debt_flag
 )
+
+
+
+
+
+
 
 
 dcf_function <- function(Input_List){
