@@ -153,29 +153,44 @@ get_dcf_data <- function(ticker){
   return(output_list)
 }
 
-#"dow30tickers.csv"
-getDowData <- function(csvFile){
-  # Get a list of dow jones 30 tickers and transform them from factor to character
-  dowtickers <- as.character(unlist(read.csv(file = csvFile, header = FALSE,sep = ",")))
-  
-  # dcf_data_list will have the same length of 'dowtickers'
-  # each element in dcf_data_list is essentially a 'input_list' from the long assignment
-  # therefore, each of these lists is a list of 32 elements...
-  dcf_data_list <- list(get_dcf_data(dowtickers[[1]]))
-  for (i in 2:5){#length(dowtickers)){
-    dcf_data_list[i] <- list(get_dcf_data(dowtickers[[i]]))
-  }
-  
-  # the name of each of the 30 lists will be their corresponding stock ticker
-  #names(dcf_data_list) <- dowtickers
-  #str(dcf_data_list)
-  
-  return(dcf_data_list)
-}
+# # Get a list of dow jones 30 tickers and transform them from factor to character
+# dowtickers <- as.character(unlist(read.csv(file = "dow30tickers.csv",header = FALSE,sep = ",")))
+# 
+# # dcf_data_list will have the same length of 'dowtickers'
+# # each element in dcf_data_list is essentially a 'input_list' from the long assignment
+# # therefore, each of these lists is a list of 32 elements...
+# dcf_data_list <- list(get_dcf_data(dowtickers[[1]]))
+# for (i in 2:length(dowtickers)){
+#   dcf_data_list[i] <- list(get_dcf_data(dowtickers[[i]]))
+# }
+# dcf_data_list
+# # the name of each of the 30 lists will be their corresponding stock ticker
+# names(dcf_data_list) <- dowtickers
+# str(dcf_data_list)
 
-
-#setwd("C:/Users/mikem/Projects/4590/4590_FinalProject/")
-dowData <- getDowData("dow30tickers.csv")
-df_dow_Data <- as.data.frame(dowData)
-
-setwd("C:/Users/mikem/Projects/4590/4590_FinalProject/")
+# #"dow30tickers.csv"
+# getDowData <- function(csvFile){
+#   # Get a list of dow jones 30 tickers and transform them from factor to character
+#   dowtickers <- as.character(unlist(read.csv(file = csvFile, header = FALSE,sep = ",")))
+#   
+#   # dcf_data_list will have the same length of 'dowtickers'
+#   # each element in dcf_data_list is essentially a 'input_list' from the long assignment
+#   # therefore, each of these lists is a list of 32 elements...
+#   dcf_data_list <- list(get_dcf_data(dowtickers[[1]]))
+#   for (i in 2:5){#length(dowtickers)){
+#     dcf_data_list[i] <- list(get_dcf_data(dowtickers[[i]]))
+#   }
+#   
+#   # the name of each of the 30 lists will be their corresponding stock ticker
+#   #names(dcf_data_list) <- dowtickers
+#   #str(dcf_data_list)
+#   
+#   return(dcf_data_list)
+# }
+# 
+# 
+# #setwd("C:/Users/mikem/Projects/4590/4590_FinalProject/")
+# dowData <- getDowData("dow30tickers.csv")
+# #df_dow_Data <- as.data.frame(dowData)
+# 
+# setwd("C:/Users/mikem/Projects/4590/4590_FinalProject/")

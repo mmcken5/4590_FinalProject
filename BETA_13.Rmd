@@ -42,7 +42,6 @@ rm(list = ls())
 #setwd("~/Documents/R_Final Project")
 getwd()
 setwd("C:/Users/mikem/Projects/4590/4590_FinalProject/")
-
 # source necessary files
 source("database.R")
 source("get_data.R")
@@ -65,6 +64,7 @@ my_db <- connectToDB("stock_db.sqlite3")
 
 my_df <- getInitialDowData()
 
+
 # Add each stock list to the existing data frame
 # for (i in 2:length(dow_data_list)){
 #  my_df <- addToDF(my_df, dow_data_list[[i]]) 
@@ -77,7 +77,7 @@ if (!doesDBContainTable(my_db, "stocksData")){
 }
 
 # Get the table
-my_tbl <<- getTable(my_db, "stocksData")
+my_tbl <- getTable(my_db, "stocksData")
 
 # Get the number of rows in the table
 tblNMB <- nrow(my_tbl)
@@ -189,7 +189,12 @@ numericInput(
   value = 0.015,
   width = '120px'
   ),
+  fileInput('datafile', 'Choose CSV file',
+              accept=c('text/csv', 'text/comma-separated-values,text/plain')),
 
+
+
+ 
 radioButtons(
   inputId = 'Cost_of_Debt_Flag_S',
   label = "Seperate Cost of Debt for Stable Period?",
@@ -197,16 +202,10 @@ radioButtons(
   choiceNames = c("Yes","No"),
   choiceValues = c(TRUE,FALSE),
   width = '120px'
-  ),
-
-fileInput('datafile', 'Choose CSV file',
-              accept=c('text/csv', 'text/comma-separated-values,text/plain')),
-
-actionButton("do", "Submit CSV File")
+  )
 ),
 mainPanel(
-  tableOutput('DCFvalue'),
-  tableOutput('DCFvalueNEW')
+  tableOutput('DCFvalue')
   #textOutput("Dashtest"),
   #plotOutput('testo')
   #textOutput("DCFtable")
@@ -216,25 +215,35 @@ mainPanel(
 
 
 server <- function(input,output){
+ 
+  #Adding more Stocks
+  #This function is repsonsible for loading in the selected file
+
+
   dcf_function <- function(){
     output_value_equity <- NULL
     value_of_equity_per_share <- NULL
     
-    
+ 
     # MAY NEED TO MAKE THIS GLOBAL
     infile <- input$datafile
     if (is.null(infile)){
       
     }
     else {
-      ExtraData <-as.character(unlist(read.csv(file = infile$datapath, header = FALSE,sep = ",")))
-    
-      newData <- get_dcf_data(ExtraData)
-      my_tbl <<- rbind(my_tbl, newData)
-      tblNMB <<- nrow(my_tbl)
+      #ExtraData <-as.character(unlist(read.csv(file = infile$datapath, header = FALSE,sep = ",")))
+      ExtraData <-as.character(unlist(read.csv(file = "TestCSV2.csv", header = FALSE,sep = ",")))
+      for (i in 1:length(ExtraData)){    
+        newData <- get_dcf_data(ExtraData[i])
+        #newData$current_revenue
+        my_tbl <<- rbind(my_tbl, newData)
+        tblNMB <<- nrow(my_tbl)
+      }
     }
     
-    
+   
+
+ 
     tax_rate <- input$Tax_Rate_S
     cost_of_equity <- input$Cost_of_Equity_S
     cost_of_debt <- input$Cost_of_Debt_S
@@ -397,7 +406,7 @@ server <- function(input,output){
     equity_capital_ratio_val <- (1-book_val_debt/(book_val_debt+book_val_equity))
   }
   else{
-    equity_capital_ratio_val <- 1-debt_capital_raio
+    equity_capital_ratio_val <- 1-debt_capital_ratio
   }
   
   after_tax_cost_of_debt <- cost_of_debt * (1-tax_rate)
@@ -515,7 +524,7 @@ server <- function(input,output){
     cost_of_equity_stable_period <- risk_free_rate+beta_stock*risk_premium
   }
   else{
-    cost_of_debt_stable_period <- risk_free_rate+beta_stable_period*risk_premium
+    cost_of_equity_stable_period <- risk_free_rate+beta_stable_period*risk_premium
   }
   
   if(debt_capital_ratio_stable_period ==0){
@@ -547,9 +556,10 @@ server <- function(input,output){
   }
   
   output_value_equity <- c(output_value_equity, value_of_firm-output_value_debt)
-  value_of_equity_per_share <- output_value_equity/shares_outstanding
-  margin_safety <- (1 - (value_of_equity_per_share/current_stock_price))
+ 
   }
+  value_of_equity_per_share <- output_value_equity/my_tbl$shares_outstanding
+  margin_safety <- (1 - (value_of_equity_per_share/current_stock_price))
   
   DCFfinalput <- data.frame(StockName,output_value_equity,value_of_equity_per_share, margin_safety)
   
@@ -557,57 +567,11 @@ server <- function(input,output){
 
   }
   
-  #This function is repsonsible for loading in the selected file
-  filedata <- reactive({
-    
-  })
-  
-  observeEvent(input$do, {
-    # MAY NEED TO MAKE THIS GLOBAL
-    infile <- input$datafile
-    if (is.null(infile)) {
-      # User has not uploaded a file yet
-      return(NULL)
-    }
-    # Download stock data
-    new_stock_data <- getDowData(infile$datapath)
-    
-    # Create data frame from data list
-    my_df <- createDF(new_stock_data[[1]])
-    
-    # Add each stock list to the existing data frame
-    for (i in 2:length(new_stock_data)){
-     my_df <- addToDF(my_df, new_stock_data[[i]])
-    }
-    
-    # Write to CSV
-    write.csv(my_df, file = "NewData.csv")
-    
-    # Get data as a data frame
-    mydata = read.csv("NewData.csv")
-    # Remove first column
-    mydata <- mydata[-1]
-    
-    ####temp <- mydata[mydata$current_revenue==0,]$current_revenue <- 5
-    
-    # Add the new df to the old df to update the old df
-    my_tbl <<- rbind(my_df, mydata)
-    
-    # Re-run dcf function to display table
-    output$DCFvalueNEW <- renderTable(c(dcf_function()), spacing= "s", colnames = TRUE)
-  })
+
 
   output$DCFvalue <- renderTable(c(dcf_function()), spacing= "s", colnames = TRUE)
-  #output$DCFvalue <- renderPrint(dcf_function())
 
-  #output$DCFtable <- renderText(dcf_inputs2()["current_revenue"])
-  #output$Dashtest = renderText("sadasd")
-  #output$DCFvalue = renderText(dcf_function(dcf_inputs2()))
-  #output$testo = renderPlot({
-   # hist(rnorm(100))
-  #})
- 
-   
+  
 }
 
  
