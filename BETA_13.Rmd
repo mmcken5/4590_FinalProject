@@ -1,6 +1,6 @@
 ---
 title: "DOW"
-author: "Jordan, Krishnan, Ricky, Andrew, Harrison, Sahana, Michael"
+author: "Jordan, Krishnan, Ricky, Andrew, Harrison, Sahana, Michael McKenzie (250676716), Jessica Song (250746235)"
 date: '2017-04-15'
 output: 
   flexdashboard::flex_dashboard:
@@ -231,8 +231,7 @@ server <- function(input,output){
       
     }
     else {
-      #ExtraData <-as.character(unlist(read.csv(file = infile$datapath, header = FALSE,sep = ",")))
-      ExtraData <-as.character(unlist(read.csv(file = "TestCSV2.csv", header = FALSE,sep = ",")))
+      ExtraData <-as.character(unlist(read.csv(file = infile$datapath, header = FALSE,sep = ",")))
       for (i in 1:length(ExtraData)){    
         newData <- get_dcf_data(ExtraData[i])
         #newData$current_revenue
